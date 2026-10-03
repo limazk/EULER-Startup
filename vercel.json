@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/analyze.py": { "maxDuration": 30 }
+  },
+  "routes": [
+    { "src": "/server/.*", "status": 404 },
+    { "src": "/tests/.*", "status": 404 },
+    { "src": "/README\\.md", "status": 404 },
+    { "src": "/(abrir-demo\\.sh|ABRIR-DEMO\\.cmd|requirements\\.txt)", "status": 404 }
+  ]
+}
