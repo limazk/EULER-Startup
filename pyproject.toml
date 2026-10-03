@@ -1,0 +1,14 @@
+[project]
+name = "euler-landing"
+version = "0.1.0"
+description = "Landing page da EULER com a prévia da investigação (função /api/analyze)."
+requires-python = ">=3.11"
+dependencies = [
+    "pandas==3.0.6",
+    "numpy>=2.0",
+    "iapws==1.5.5",
+    "openpyxl>=3.1",
+]
+
+[tool.vercel]
+entrypoint = "api/analyze.py"
