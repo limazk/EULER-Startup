@@ -4,3 +4,4 @@ __pycache__/
 .vercel/
 tests/artifacts/
 .env
+.pytest_cache/
