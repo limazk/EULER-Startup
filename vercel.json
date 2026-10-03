@@ -3,12 +3,27 @@
   "functions": {
     "api/analyze.py": { "maxDuration": 30 }
   },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; media-src 'self'; manifest-src 'self'; upgrade-insecure-requests" },
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "Cross-Origin-Resource-Policy", "value": "same-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=()" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Permitted-Cross-Domain-Policies", "value": "none" }
+      ]
+    }
+  ],
   "routes": [
-    { "src": "/server(?:/.*)?", "status": 404 },
-    { "src": "/tests(?:/.*)?", "status": 404 },
-    { "src": "/\\..*", "status": 404 },
-    { "src": "/(?:pyproject\\.toml|vercel\\.json)", "status": 404 },
-    { "src": "/README\\.md", "status": 404 },
+    { "src": "/server/.*", "status": 404 },
+    { "src": "/tests/.*", "status": 404 },
+    { "src": "/api/.*\\.py", "status": 404 },
+    { "src": "/(README\\.md|SECURITY\\.md|pyproject\\.toml|vercel\\.json|\\.gitignore|\\.vercelignore)", "status": 404 },
     { "src": "/(abrir-demo\\.sh|ABRIR-DEMO\\.cmd|requirements\\.txt)", "status": 404 }
   ]
 }
