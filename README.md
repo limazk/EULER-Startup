@@ -170,23 +170,3 @@ Confira o conteudo preparado antes de commitar. `.gitignore` cobre ambientes
 virtuais, bytecode Python, caches, cobertura, `.vercel/`, capturas de testes,
 logs, arquivos do sistema e `.env*` (com excecao de `.env.example`). Nenhum desses
 arquivos e necessario para clonar e executar o projeto. Nunca versione credenciais.
-
-## Troubleshooting
-
-- `The specified Root Directory "server" does not exist.`: em Settings >
-  Build and Deployment da Vercel, remova `server` de Root Directory e use a
-  **raiz do repositorio**. Salve e gere um novo deploy.
-- API indisponivel ou resposta HTML: abrir somente `index.html` ou usar um
-  servidor estatico nao executa Python. Inicie `server/app.py`; na Vercel,
-  confirme a raiz, a funcao `/api/analyze` e os logs de instalacao.
-- `ModuleNotFoundError`: use o Python da `.venv` e reinstale
-  `server/requirements.txt`. No deploy, preserve `server/vendor/euler/`.
-- Porta ocupada: use `--port 8767` e ajuste `EULER_TEST_URL` nos testes.
-- Chromium ausente: execute `python -m playwright install chromium` no ambiente
-  de testes ou informe `EULER_CHROMIUM_PATH`.
-- Sem WebGL: o site oferece modo de leitura; o teste da cena exige WebGL
-  funcionando, inclusive renderizacao por software em ambientes sem GPU.
-- Push falhou: confira `git remote -v`, DNS, conexao e autenticacao GitHub.
-  Preserve o commit local e repita `git push origin HEAD` apos resolver o acesso.
-- Preview limitada ou insuficiente: revise registros, periodos e incertezas
-  indicados pelo motor. Nao substitua dados ausentes por zero.
