@@ -27,6 +27,14 @@ bash abrir-demo.sh --port 8767
 
 Nesse caso, abra http://127.0.0.1:8767/#euler-demo.
 
+## Publicar na Vercel
+
+Importe o repositório na Vercel como projeto sem etapa de build (framework "Other").
+Não há comando de build: `index.html` e `assets/` são publicados como estáticos, e
+`api/analyze.py` atende `/api/analyze` como função Python, instalando as dependências
+de `requirements.txt`. O `vercel.json` impede que `server/`, `tests/` e os documentos
+sejam servidos como arquivos públicos.
+
 ## Entrega
 
 - O formulario aceita dados proprios e dois casos sinteticos editaveis.

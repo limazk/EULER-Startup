@@ -18,7 +18,7 @@ Ou execute `bash abrir-demo.sh`, que prepara o ambiente caso necessário.
 
 No Windows, use `ABRIR-DEMO.cmd` com Python 3.11 ou superior instalado. Abra o endereço indicado no terminal e mantenha a janela aberta.
 
-Não basta abrir `index.html` diretamente: o cálculo usa o motor Python original. Uma hospedagem apenas estática, como GitHub Pages, precisa de um serviço Python separado, com `/api/analyze` encaminhado pelo mesmo domínio. Nenhuma publicação, alteração remota ou envio de dados reais foi realizado neste trabalho.
+Não basta abrir `index.html` diretamente: o cálculo usa o motor Python original. Uma hospedagem apenas estática, como GitHub Pages, precisa de um serviço Python separado, com `/api/analyze` encaminhado pelo mesmo domínio. Na Vercel, `api/analyze.py` cumpre esse papel. Nenhuma publicação, alteração remota ou envio de dados reais foi realizado neste trabalho.
 
 ## O que está implementado
 
@@ -41,7 +41,7 @@ Os registros são mantidos na memória do navegador até “Gerar prévia”. Ne
 
 O protótipo aceita uma caldeira por análise, até 5.000 registros e 3 MB por envio. A importação da interface aceita CSV UTF-8 com cabeçalhos do modelo, separador vírgula ou ponto e vírgula. Números admitem vírgula ou ponto decimal, sem separadores de milhar. Os limites existem para a demonstração pública; não representam a capacidade total do motor.
 
-O serviço incluso é um servidor local de demonstração. Para publicação pública, usar a infraestrutura adequada ao tráfego esperado, HTTPS e roteamento do serviço Python. Não publicar `server/`, testes ou ambientes virtuais como arquivos estáticos.
+O serviço incluso em `server/app.py` é um servidor local de demonstração. Na Vercel, a mesma validação e o mesmo motor são usados por `api/analyze.py`, e `vercel.json` bloqueia `server/`, `tests/` e os documentos. Para outro ambiente de publicação, usar infraestrutura adequada ao tráfego esperado, HTTPS e roteamento do serviço Python, sem publicar `server/`, testes ou ambientes virtuais como arquivos estáticos.
 
 ## Organização
 
@@ -50,9 +50,9 @@ O serviço incluso é um servidor local de demonstração. Para publicação pú
 - `assets/euler-demo-data.mjs`: leitura de CSV e validações do formulário.
 - `assets/euler-schema.json`: metadados gerados do contrato original.
 - `assets/euler-example-*.json`: os dois casos sintéticos originais, em formato editável.
-- `server/app.py`: validação do envio, integração com o motor e projeção pública dos resultados.
+- `server/app.py`: validação do envio, integração com o motor e projeção pública dos resultados (servidor local).
+- `api/analyze.py`: mesma rota e mesma validação, como função serverless da Vercel.
 - `server/vendor/euler/`: cópia inalterada dos 29 arquivos Python do motor.
-- `assets/euler-demo-core.mjs`: calculadora anterior, preservada por compatibilidade; não é usada na nova interface.
 
 Os bundles `assets/index-CBAnsQIh.js` e `assets/index-nbNCdXHx.css` não foram editados. `assets/euler-demo-scene.css` isola as camadas fixas da cena (canvas, etiquetas, pontos clicáveis e painéis) quando a demonstração ocupa o centro da tela ou está aberta. A rolagem atualiza esse estado inclusive em seções maiores que a tela. Ao sair, as camadas voltam a seguir a cena original. Entrar na demonstração encerra a exploração 3D pelos controles existentes, liberando a câmera e a rolagem.
 
