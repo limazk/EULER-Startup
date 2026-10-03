@@ -48,7 +48,22 @@ Para mover o projeto, leve esta pasta com `index.html`, `og-image.png`, `assets/
 destino. Abrir apenas o HTML ou publicar somente arquivos estaticos nao executa
 o motor Python.
 
-Detalhes, limites e comandos de teste: [EMULADOR.md](EMULADOR.md).
+## Testes
+
+```sh
+node --test tests/*.test.mjs
+.venv/bin/python -m unittest discover -s tests -p 'test_preview_api.py' -v
+```
+
+Os testes de navegador exigem Playwright instalado e o servidor ativo na porta 8766:
+
+```sh
+.venv/bin/pip install playwright
+.venv/bin/python tests/check-demo-browser.py
+.venv/bin/python tests/check-scene-browser.py
+```
+
+Os testes usam apenas dados sintéticos. As capturas de tela são geradas em `tests/artifacts/`, que não é versionado.
 
 ## Verificacao desta revisao
 

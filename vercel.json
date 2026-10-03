@@ -6,7 +6,7 @@
   "routes": [
     { "src": "/server/.*", "status": 404 },
     { "src": "/tests/.*", "status": 404 },
-    { "src": "/(README|EMULADOR)\\.md", "status": 404 },
+    { "src": "/README\\.md", "status": 404 },
     { "src": "/(abrir-demo\\.sh|ABRIR-DEMO\\.cmd|requirements\\.txt)", "status": 404 }
   ]
 }
