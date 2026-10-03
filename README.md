@@ -125,6 +125,14 @@ Use `EULER_CHROMIUM_PATH=/usr/bin/chromium` para um Chromium do sistema e
 Os testes cobrem fluxo completo, layouts de 320 a 1440 pixels, modal, fallback
 e pixels da cena WebGL. Capturas ficam em `tests/artifacts/` (ignorado).
 
+## Segurança da prévia pública
+
+A landing page é pública; os controles protegem principalmente a API de demonstração e evitam exposição acidental de arquivos internos.
+
+O projeto aplica CSP e headers contra clickjacking/sniffing, HSTS na Vercel, restrição de métodos/origem para `POST /api/analyze`, limite de 3 MB, validação rigorosa dos registros, tratamento de erro sem traceback e rate limit best-effort por cliente. Consulte [`SECURITY.md`](./SECURITY.md) para detalhes e a configuração recomendada do Firewall da Vercel.
+
+> Em produção, use também Rate Limiting no Firewall da Vercel para `/api/analyze`. O limitador Python não é global entre todas as instâncias serverless.
+
 ## Deploy na Vercel
 
 Importe o repositorio GitHub e configure:
