@@ -8,11 +8,10 @@ from http.server import BaseHTTPRequestHandler
 import json
 from pathlib import Path
 import sys
-from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "server"))
 
-from app import InputError, analyze  # noqa: E402
+from app import InputError, analyze, same_origin  # noqa: E402
 
 
 class handler(BaseHTTPRequestHandler):
@@ -23,6 +22,8 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        if code == 405:
+            self.send_header("Allow", "POST")
         self.end_headers()
         try:
             self.wfile.write(body)
@@ -34,7 +35,7 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         origin = self.headers.get("Origin")
-        if origin and urlsplit(origin).netloc != self.headers.get("Host"):
+        if not same_origin(origin, self.headers.get("Host")):
             return self.send_json(403, {"message": "Envie a análise a partir deste site."})
         if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
             return self.send_json(415, {"message": "Formato de envio não suportado."})

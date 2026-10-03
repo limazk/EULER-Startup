@@ -30,6 +30,16 @@ class InputError(ValueError):
     pass
 
 
+def same_origin(origin, host):
+    if not origin:
+        return True
+    try:
+        parsed = urlsplit(origin)
+        return parsed.scheme in {"http", "https"} and parsed.netloc == host
+    except ValueError:
+        return False
+
+
 def validate(payload):
     if not isinstance(payload, dict) or not isinstance(payload.get("tables"), dict):
         raise InputError("Informe os registros da caldeira.")
@@ -153,6 +163,8 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        if code == 405:
+            self.send_header("Allow", "POST")
         self.end_headers()
         try:
             self.wfile.write(body)
@@ -161,6 +173,8 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         path = urlsplit(self.path).path
+        if path == "/api/analyze":
+            return self.json_response(405, {"message": "Envie a análise por POST."})
         if path == "/api/status":
             return self.json_response(200, {"ready": True})
         resolved = Path(self.translate_path(self.path)).resolve()
@@ -182,7 +196,7 @@ class Handler(SimpleHTTPRequestHandler):
         if urlsplit(self.path).path != "/api/analyze":
             return self.send_error(404)
         origin = self.headers.get("Origin")
-        if origin and urlsplit(origin).netloc != self.headers.get("Host"):
+        if not same_origin(origin, self.headers.get("Host")):
             return self.json_response(403, {"message": "Envie a análise a partir deste site."})
         if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
             return self.json_response(415, {"message": "Formato de envio não suportado."})

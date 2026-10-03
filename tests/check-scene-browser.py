@@ -12,7 +12,7 @@ URL = os.environ.get("EULER_TEST_URL", "http://127.0.0.1:8766/")
 
 with sync_playwright() as p:
     browser = p.chromium.launch(
-        executable_path="/usr/bin/chromium",
+        executable_path=os.environ.get("EULER_CHROMIUM_PATH"),
         headless=True,
         args=["--no-sandbox", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
     )

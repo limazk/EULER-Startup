@@ -4,8 +4,10 @@
     "api/analyze.py": { "maxDuration": 30 }
   },
   "routes": [
-    { "src": "/server/.*", "status": 404 },
-    { "src": "/tests/.*", "status": 404 },
+    { "src": "/server(?:/.*)?", "status": 404 },
+    { "src": "/tests(?:/.*)?", "status": 404 },
+    { "src": "/\\..*", "status": 404 },
+    { "src": "/(?:pyproject\\.toml|vercel\\.json)", "status": 404 },
     { "src": "/README\\.md", "status": 404 },
     { "src": "/(abrir-demo\\.sh|ABRIR-DEMO\\.cmd|requirements\\.txt)", "status": 404 }
   ]
