@@ -24,20 +24,18 @@ from euler.io import importar_pacote
 from euler.io.esquemas import TABELAS
 from euler.investigacao import investigar
 from euler.vapor import p_atm_por_altitude_bar
+from security import (
+    RATE_LIMITER,
+    SECURITY_HEADERS,
+    client_key,
+    content_length,
+    media_type,
+    same_origin,
+)
 
 
 class InputError(ValueError):
     pass
-
-
-def same_origin(origin, host):
-    if not origin:
-        return True
-    try:
-        parsed = urlsplit(origin)
-        return parsed.scheme in {"http", "https"} and parsed.netloc == host
-    except ValueError:
-        return False
 
 
 def validate(payload):
@@ -153,23 +151,34 @@ def analyze(payload):
 
 
 class Handler(SimpleHTTPRequestHandler):
+    server_version = "EULER"
+    sys_version = ""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
-    def json_response(self, code, value):
+    def end_headers(self):
+        for name, value in SECURITY_HEADERS.items():
+            self.send_header(name, value)
+        super().end_headers()
+
+    def json_response(self, code, value, extra_headers=None):
         body = json.dumps(value, ensure_ascii=False, allow_nan=False, default=str).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
-        self.send_header("X-Content-Type-Options", "nosniff")
         if code == 405:
             self.send_header("Allow", "POST")
+        for name, value in (extra_headers or {}).items():
+            self.send_header(name, value)
         self.end_headers()
+        if self.command == "HEAD":
+            return
         try:
             self.wfile.write(body)
         except (BrokenPipeError, ConnectionResetError):
-            pass  # The visitor cancelled or closed the demonstration.
+            pass
 
     def do_GET(self):
         path = urlsplit(self.path).path
@@ -192,18 +201,39 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_error(404)
         super().do_HEAD()
 
+    def _api_method_not_allowed(self):
+        if urlsplit(self.path).path == "/api/analyze":
+            return self.json_response(405, {"message": "Envie a análise por POST."})
+        return self.send_error(404)
+
+    do_OPTIONS = _api_method_not_allowed
+    do_PUT = _api_method_not_allowed
+    do_PATCH = _api_method_not_allowed
+    do_DELETE = _api_method_not_allowed
+
     def do_POST(self):
         if urlsplit(self.path).path != "/api/analyze":
             return self.send_error(404)
-        origin = self.headers.get("Origin")
-        if not same_origin(origin, self.headers.get("Host")):
+        if not same_origin(self.headers):
             return self.json_response(403, {"message": "Envie a análise a partir deste site."})
-        if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
+        if media_type(self.headers) != "application/json":
             return self.json_response(415, {"message": "Formato de envio não suportado."})
+
+        key = client_key(self.headers, getattr(self, "client_address", ("unknown",))[0])
+        allowed, retry_after = RATE_LIMITER.check(key)
+        if not allowed:
+            return self.json_response(
+                429,
+                {"message": "Muitas análises em pouco tempo. Tente novamente em instantes."},
+                {"Retry-After": str(retry_after)},
+            )
         try:
-            length = int(self.headers.get("Content-Length", "0"))
-            if not 0 < length <= 3_000_000:
+            try:
+                length = content_length(self.headers)
+            except OverflowError:
                 return self.json_response(413, {"message": "O envio deve ter até 3 MB."})
+            except ValueError:
+                return self.json_response(400, {"message": "Requisição HTTP inválida."})
             payload = json.loads(self.rfile.read(length))
             self.json_response(200, analyze(payload))
         except (InputError, ValueError, TypeError, KeyError) as error:
