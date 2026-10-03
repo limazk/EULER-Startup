@@ -27,6 +27,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script type="module" crossorigin src="/assets/index-CBAnsQIh.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-nbNCdXHx.css">
+  <script type="module" src="./assets/euler-demo.js"></script>
+  <link rel="stylesheet" href="./assets/euler-demo-scene.css">
+  <style>
+    @media(max-width:760px){
+      #investigacao .beat__content{min-width:0;max-width:100%}
+      #investigacao .report header{flex-wrap:wrap}
+      #investigacao .report dl div{grid-template-columns:minmax(0,1fr)}
+      #investigacao .report dd{overflow-wrap:anywhere}
+      #investigacao .report .tag{white-space:normal;max-width:100%}
+    }
+  </style>
 </head>
 <body>
   <a class="skip" href="#main">Pular para o conteúdo</a>
@@ -80,7 +91,7 @@
           <p class="lead">A EULER lê os registros que a caldeira já tem, usa física para investigar por que o consumo de combustível mudou, mostra o que ainda não dá para saber e indica qual medição resolve.</p>
           <div class="actions">
             <a class="btn btn--dark" href="#proposta">Propor um piloto exploratório</a>
-            <a class="textlink" href="#problema">Ver o problema ↓</a>
+            <a class="textlink" href="#euler-demo">Testar a EULER ↓</a>
           </div>
         </div>
         <div class="hero-lang" data-lang-block="en" lang="en" hidden>
@@ -177,6 +188,14 @@
             </dl>
           </article>
       </div></div>
+    </section>
+
+    <!-- Demonstração isolada: fora de .beat para preservar a sequência de cenas 3D. -->
+    <section id="euler-demo" aria-label="Experimente a EULER">
+      <euler-demo>
+        <p>Demonstração interativa: compare o consumo de combustível entre períodos.
+          Ative o JavaScript para experimentar ou <a href="#proposta">proponha um piloto exploratório</a>.</p>
+      </euler-demo>
     </section>
 
     <!-- 08 · HONESTIDADE -->
