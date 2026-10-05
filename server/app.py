@@ -187,7 +187,7 @@ class Handler(SimpleHTTPRequestHandler):
         if path == "/api/status":
             return self.json_response(200, {"ready": True})
         resolved = Path(self.translate_path(self.path)).resolve()
-        allowed = resolved in {ROOT / "index.html", ROOT / "og-image.png", ROOT} or resolved.is_relative_to(ROOT / "assets")
+        allowed = resolved in {ROOT / "index.html", ROOT / "legal.html", ROOT / "og-image.png", ROOT} or resolved.is_relative_to(ROOT / "assets")
         if not allowed or (resolved != ROOT and not resolved.is_file()):
             return self.send_error(404)
         super().do_GET()
@@ -195,7 +195,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_HEAD(self):
         # Same allowlist as GET; avoid exposing source or virtual-environment paths.
         path = Path(self.translate_path(self.path)).resolve()
-        if path not in {ROOT, ROOT / "index.html", ROOT / "og-image.png"} and not path.is_relative_to(ROOT / "assets"):
+        if path not in {ROOT, ROOT / "index.html", ROOT / "legal.html", ROOT / "og-image.png"} and not path.is_relative_to(ROOT / "assets"):
             return self.send_error(404)
         if path.is_dir() and path != ROOT:
             return self.send_error(404)
