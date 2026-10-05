@@ -37,6 +37,14 @@
       #investigacao .report dd{overflow-wrap:anywhere}
       #investigacao .report .tag{white-space:normal;max-width:100%}
     }
+    .demo-legal-notice{position:relative;z-index:3;max-width:1240px;margin:0 auto;padding:28px var(--pad,24px) 0;color:#111418}
+    .demo-legal-notice__box{display:grid;grid-template-columns:auto 1fr;gap:14px 18px;align-items:start;padding:18px 20px;border:1px solid #1114182b;border-radius:14px;background:#fbfbf8e8;backdrop-filter:blur(12px)}
+    .demo-legal-notice__tag{font:500 11px/1.5 var(--f-mono,monospace);letter-spacing:.05em;text-transform:uppercase;color:#a8500f;border:1px solid currentColor;border-radius:999px;padding:4px 9px;white-space:nowrap}
+    .demo-legal-notice p{margin:0;color:#3a4047;font-size:14px;line-height:1.55}
+    .demo-legal-notice strong{color:#111418;font-weight:600}
+    .demo-legal-notice a{color:#111418;text-underline-offset:3px}
+    .footer__legal a{color:inherit;text-underline-offset:3px}
+    @media(max-width:760px){.demo-legal-notice{padding:20px 20px 0}.demo-legal-notice__box{grid-template-columns:1fr}.demo-legal-notice__tag{justify-self:start}}
   </style>
 </head>
 <body>
@@ -192,6 +200,12 @@
 
     <!-- Demonstração isolada: fora de .beat para preservar a sequência de cenas 3D. -->
     <section id="euler-demo" aria-label="Experimente a EULER">
+      <div class="demo-legal-notice" role="note" aria-label="Aviso da demonstração pública">
+        <div class="demo-legal-notice__box">
+          <span class="demo-legal-notice__tag">Demonstração pública</span>
+          <p><strong>Não envie dados industriais confidenciais, segredos comerciais ou informações sensíveis.</strong> Esta versão pública demonstra apenas parte das capacidades da EULER. Os registros enviados são processados para gerar a análise; a aplicação não foi projetada para persistir esses registros. <a href="/legal.html">Leia o aviso legal e os créditos de terceiros.</a></p>
+        </div>
+      </div>
       <euler-demo>
         <p>Demonstração interativa: compare o consumo de combustível entre períodos.
           Ative o JavaScript para experimentar ou <a href="#proposta">proponha um piloto exploratório</a>.</p>
@@ -464,7 +478,7 @@
           <p id="shareText">Mesmo vapor, mais combustível? A EULER lê os registros que a caldeira já tem e investiga o porquê com física.</p>
           <button class="textlink" id="shareBtn" type="button">Copiar frase</button>
         </div>
-        <p class="footer__legal">Data first. Hardware when justified. · © 2026 EULER</p>
+        <p class="footer__legal">Data first. Hardware when justified. · © 2026 EULER · Versão pública 0.1.0 · Motor 0.0.1 · <a href="/legal.html">Aviso legal e terceiros</a></p>
       </footer>
     </section>
 
