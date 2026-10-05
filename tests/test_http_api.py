@@ -68,6 +68,8 @@ class HTTPTests(unittest.TestCase):
                     self.assertEqual(headers['Allow'], 'POST')
                     if adapter is Handler:
                         self.assertEqual(request('GET', '/', None)[0], 200)
+                        self.assertEqual(request('GET', '/legal.html', None)[0], 200)
+                        self.assertEqual(request('HEAD', '/legal.html', None)[0], 200)
                         self.assertEqual(request('GET', '/assets/euler-schema.json', None)[0], 200)
                         for path in ('/server/app.py', '/.git/config', '/pyproject.toml', '/assets/../server/app.py'):
                             for method in ('GET', 'HEAD'):
