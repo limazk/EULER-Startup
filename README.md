@@ -19,6 +19,8 @@ Os exemplos sao sinteticos; a previa nao substitui uma investigacao tecnica.
 Frontend -> POST /api/analyze -> Python -> motor EULER -> JSON
 
 index.html                    Pagina publica
+legal.html                    Aviso legal publico e creditos de terceiros
+THIRD_PARTY_NOTICES.md        Inventario de dependencias e licencas
 assets/                       CSS, JavaScript, esquema e exemplos
 og-image.png                  Imagem social
 api/analyze.py                Funcao Python da Vercel
@@ -132,6 +134,24 @@ A landing page é pública; os controles protegem principalmente a API de demons
 O projeto aplica CSP e headers contra clickjacking/sniffing, HSTS na Vercel, restrição de métodos/origem para `POST /api/analyze`, limite de 3 MB, validação rigorosa dos registros, tratamento de erro sem traceback e rate limit best-effort por cliente. Consulte [`SECURITY.md`](./SECURITY.md) para detalhes e a configuração recomendada do Firewall da Vercel.
 
 > Em produção, use também Rate Limiting no Firewall da Vercel para `/api/analyze`. O limitador Python não é global entre todas as instâncias serverless.
+
+## Propriedade intelectual e componentes de terceiros
+
+A versão pública identifica separadamente a demonstração da EULER e o motor
+científico. O site apresenta um aviso para não envio de dados industriais
+confidenciais na demonstração pública e disponibiliza `legal.html` com as
+condições gerais de uso da prévia.
+
+O inventário de componentes de terceiros fica em
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md). Ele deve ser revisado
+sempre que uma dependência for adicionada, removida ou atualizada. Em especial,
+o pacote `iapws==1.5.5` é distribuído sob GPLv3 e merece análise específica
+antes de qualquer distribuição comercial do software ou de pacotes que o
+incorporem.
+
+O repositório público não declara uma licença geral para o código próprio da
+EULER. A autoria e a titularidade patrimonial devem ser documentadas
+separadamente antes de um eventual depósito no INPI.
 
 ## Deploy na Vercel
 
